@@ -102,30 +102,30 @@ export default function handler(req, res) {
   const options = req.query;
 
   if (!options.type) {
-    res.status(405).send({ message: 'type param needed. ex: products, reviews, asin, categories, countries' })
+    res.status(405).send({ message: '"type" param needed. ex: products, reviews, asin, categories, countries' })
     return
   }
 
   if (options.type == 'products') {
     products(options)
     .then(data => res.status(200).json(data))
-    .catch(error => res.status(500).send({ message: 'Error fetching products', error }));
+    .catch(error => res.status(500).send({ message: 'Error fetching products', error: error.message }));
   } else if (options.type == 'reviews') {
     reviews(options)
     .then(data => res.status(200).json(data))
-    .catch(error => res.status(500).send({ message: 'Error fetching reviews', error }));
+    .catch(error => res.status(500).send({ message: 'Error fetching reviews', error: error.message }));
   } else if (options.type == 'asin') {
     asin(options)
     .then(data => res.status(200).json(data))
-    .catch(error => res.status(500).send({ message: 'Error fetching asin', error }));
+    .catch(error => res.status(500).send({ message: 'Error fetching asin', error: error.message }));
   } else if (options.type == 'categories') {
     categories(options)
     .then(data => res.status(200).json(data))
-    .catch(error => res.status(500).send({ message: 'Error fetching categories', error }));
+    .catch(error => res.status(500).send({ message: 'Error fetching categories', error: error.message }));
   } else if (options.type == 'countries') {
     countries(options)
     .then(data => res.status(200).json(data))
-    .catch(error => res.status(500).send({ message: 'Error fetching countries', error }));
+    .catch(error => res.status(500).send({ message: 'Error fetching countries', error: error.message }));
   } else {
     res.status(405).send({ message: 'Wrong type key' })
   }
