@@ -14,6 +14,7 @@ const INIT_OPTIONS = {
     cli: false,
     sort: false,
     discount: false,
+    randomUa: true,
     reviewFilter: {
         // Sort by recent/top reviews
         sortBy: 'recent',

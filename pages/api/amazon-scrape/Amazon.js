@@ -1006,57 +1006,57 @@ class AmazonScraper {
         const output = {
             title: '',
             description: '',
-            feature_bullets: [],
-            variants: [],
+            // feature_bullets: [],
+            // variants: [],
             categories: [],
             asin: this.asin,
             url: `${this.mainHost}/dp/${this.asin}`,
-            reviews: {
-                total_reviews: 0,
-                rating: 0,
-                answered_questions: 0,
-            },
+            // reviews: {
+            //     total_reviews: 0,
+            //     rating: 0,
+            //     answered_questions: 0,
+            // },
             item_available: true,
             price: {
                 symbol: this.geo.symbol,
                 currency: this.geo.currency,
                 current_price: 0,
-                discounted: false,
-                before_price: 0,
-                savings_amount: 0,
-                savings_percent: 0,
+                // discounted: false,
+                // before_price: 0,
+                // savings_amount: 0,
+                // savings_percent: 0,
             },
-            bestsellers_rank: [],
+            // bestsellers_rank: [],
             main_image: '',
             total_images: 0,
             images: [],
-            total_videos: 0,
-            videos: [],
-            delivery_message: '',
-            product_information: {
-                dimensions: '',
-                weight: '',
-                available_from: '',
-                available_for_months: 0,
-                available_for_days: 0,
-                manufacturer: '',
-                model_number: '',
-                department: '',
+            // total_videos: 0,
+            // videos: [],
+            // delivery_message: '',
+            // product_information: {
+            //     dimensions: '',
+            //     weight: '',
+            //     available_from: '',
+            //     available_for_months: 0,
+            //     available_for_days: 0,
+            //     manufacturer: '',
+            //     model_number: '',
+            //     department: '',
 
-                store_id: '',
-                brand: '',
-                sold_by: '',
-                fulfilled_by: '',
-                qty_per_order: 'na',
-            },
-            badges: {
-                amazon_сhoice: false,
-                amazon_prime: false,
-                best_seller: false,
-            },
-            sponsored_products: [],
-            also_bought: [],
-            other_sellers: [],
+            //     store_id: '',
+            //     brand: '',
+            //     sold_by: '',
+            //     fulfilled_by: '',
+            //     qty_per_order: 'na',
+            // },
+            // badges: {
+            //     amazon_сhoice: false,
+            //     amazon_prime: false,
+            //     best_seller: false,
+            // },
+            // sponsored_products: [],
+            // also_bought: [],
+            // other_sellers: [],
         };
 
         const book_in_series = this.extractBookInSeries($);
@@ -1064,7 +1064,7 @@ class AmazonScraper {
             output.book_in_series = book_in_series;
         }
 
-        output.other_sellers = this.extractOtherSellers($);
+        // output.other_sellers = this.extractOtherSellers($);
 
         const authors = this.extractAuthors($);
         if (authors.length) {
@@ -1072,13 +1072,13 @@ class AmazonScraper {
         }
 
         output.categories = this.extractProductCategories($);
-        output.item_available = $('span.qa-availability-message').text() ? false : true;
+        output.item_available = $('#availability').text().includes('unavailable') ? false : true;
 
-        output.sponsored_products = this.extractSponsoredProducts($);
-        output.also_bought = this.extractAlsoBought($);
+        // output.sponsored_products = this.extractSponsoredProducts($);
+        // output.also_bought = this.extractAlsoBought($);
 
-        [output.variants, output.videos] = this.extractProductVariants($, body);
-        output.total_videos = output.videos.length;
+        // [output.variants, output.videos] = this.extractProductVariants($, body);
+        // output.total_videos = output.videos.length;
 
         output.description = $('#productDescription').text();
 
@@ -1091,28 +1091,28 @@ class AmazonScraper {
             }
         }
 
-        output.feature_bullets = this.extractProductFeatures($);
-        [output.product_information, output.bestsellers_rank] = this.extractProductInfromation($);
+        // output.feature_bullets = this.extractProductFeatures($);
+        // [output.product_information, output.bestsellers_rank] = this.extractProductInfromation($);
 
-        const deliveryMessage = $('#deliveryMessageMirId').text();
-        output.delivery_message = deliveryMessage;
+        // const deliveryMessage = $('#deliveryMessageMirId').text();
+        // output.delivery_message = deliveryMessage;
 
-        const merchantInfo = $('div[id="merchant-info"]').text();
-        if (merchantInfo) {
-            try {
-                if (merchantInfo.indexOf('Ships from and sold by ') > -1) {
-                    const splitSoldBy = merchantInfo.split('Ships from and sold by ')[1];
-                    output.product_information.sold_by = splitSoldBy.slice(0, -1);
-                    output.product_information.fulfilled_by = splitSoldBy.slice(0, -1);
-                } else {
-                    const splitSoldBy = merchantInfo.split('Sold by ')[1].split(' and ');
-                    output.product_information.sold_by = splitSoldBy[0];
-                    output.product_information.fulfilled_by = splitSoldBy[1].split('Fulfilled by ')[1].slice(0, -1);
-                }
-            } catch {
-                // continue regardless of error
-            }
-        }
+        // const merchantInfo = $('div[id="merchant-info"]').text();
+        // if (merchantInfo) {
+        //     try {
+        //         if (merchantInfo.indexOf('Ships from and sold by ') > -1) {
+        //             const splitSoldBy = merchantInfo.split('Ships from and sold by ')[1];
+        //             output.product_information.sold_by = splitSoldBy.slice(0, -1);
+        //             output.product_information.fulfilled_by = splitSoldBy.slice(0, -1);
+        //         } else {
+        //             const splitSoldBy = merchantInfo.split('Sold by ')[1].split(' and ');
+        //             output.product_information.sold_by = splitSoldBy[0];
+        //             output.product_information.fulfilled_by = splitSoldBy[1].split('Fulfilled by ')[1].slice(0, -1);
+        //         }
+        //     } catch {
+        //         // continue regardless of error
+        //     }
+        // }
 
         const maxOrderQty = $('select[id="quantity"]');
         if (maxOrderQty) {
@@ -1124,23 +1124,24 @@ class AmazonScraper {
         }
 
         output.title = $(`span[id="productTitle"]`).text() || $('.qa-title-text').text();
-        output.reviews.total_reviews = $(`span[id="acrCustomerReviewText"]`).text().split(/\s/)[0]
-            ? parseInt(
-                  $(`span[id="acrCustomerReviewText"]`)
-                      .text()
-                      .split(/\s/)[0]
-                      .replace(/[^0-9]/g, ''),
-                  10,
-              )
-            : 0;
-        output.reviews.answered_questions = $(`a[id="askATFLink"]`).text() ? parseInt($(`a[id="askATFLink"]`).text(), 10) : 0;
-        output.reviews.rating = $(`span.reviewCountTextLinkedHistogram.noUnderline`)[0]
-            ? $($(`span.reviewCountTextLinkedHistogram.noUnderline`)[0]).text().split(/\s/g)[0]
+        // output.reviews.total_reviews = $(`span[id="acrCustomerReviewText"]`).text().split(/\s/)[0]
+        //     ? parseInt(
+        //           $(`span[id="acrCustomerReviewText"]`)
+        //               .text()
+        //               .split(/\s/)[0]
+        //               .replace(/[^0-9]/g, ''),
+        //           10,
+        //       )
+        //     : 0;
+        // output.reviews.answered_questions = $(`a[id="askATFLink"]`).text() ? parseInt($(`a[id="askATFLink"]`).text(), 10) : 0;
+        // output.reviews.rating = $(`span.reviewCountTextLinkedHistogram.noUnderline`)[0]
+        //     ? $($(`span.reviewCountTextLinkedHistogram.noUnderline`)[0]).text().split(/\s/g)[0]
+        //     : 0;
+
+        output.price.current_price = $(`span.a-price.priceToPay`).text()
+            ? this.geo.price_format($(`span.a-price.priceToPay`).text())
             : 0;
 
-        output.price.current_price = $(`span.a-price.priceToPay`)[0]
-            ? this.geo.price_format($($(`span.a-price.priceToPay`)[0].children[0]).text())
-            : 0;
         if (!output.current_price) {
             try {
                 output.price.current_price = this.geo.price_format($($(`span.a-price.apexPriceToPay`)[0].children[0]).text());
@@ -1153,22 +1154,23 @@ class AmazonScraper {
             }
         }
 
-        output.product_information.store_id = $(`input[id="storeID"]`).val();
-        output.product_information.brand = $(`a[id="bylineInfo"]`).text() || '';
+        // output.product_information.store_id = $(`input[id="storeID"]`).val();
+        // output.product_information.brand = $(`a[id="bylineInfo"]`).text() || '';
 
-        output.badges.amazon_сhoice = $(`div.ac-badge-wrapper`)[0] ? true : false;
-        output.badges.amazon_prime = $(`span[id="priceBadging_feature_div"]`) || $(`span[id="priceBadging_feature_div"]`)[0] ? true : false;
-        output.badges.best_seller = $(`i.p13n-best-seller-badge`)[0] ? true : false;
-        output.price.discounted = $(`span.savingsPercentage`)[0] ? true : false;
-        output.price.before_price = output.price.discounted
-            ? this.geo.price_format($(`span.a-price.a-text-price`).text())
-            : output.price.current_price;
+        // output.badges.amazon_сhoice = $(`div.ac-badge-wrapper`)[0] ? true : false;
+        // output.badges.amazon_prime = $(`span[id="priceBadging_feature_div"]`) || $(`span[id="priceBadging_feature_div"]`)[0] ? true : false;
+        // output.badges.best_seller = $(`i.p13n-best-seller-badge`)[0] ? true : false;
 
-        if (output.price.discounted) {
-            output.price.savings_amount = +(output.price.before_price - output.price.current_price).toFixed(2);
+        // output.price.discounted = $(`span.savingsPercentage`)[0] ? true : false;
+        // output.price.before_price = output.price.discounted
+        //     ? this.geo.price_format($(`span.a-price.a-text-price`).text())
+        //     : output.price.current_price;
 
-            output.price.savings_percent = +((100 / output.price.before_price) * output.price.savings_amount).toFixed(2);
-        }
+        // if (output.price.discounted) {
+        //     output.price.savings_amount = +(output.price.before_price - output.price.current_price).toFixed(2);
+
+        //     output.price.savings_percent = +((100 / output.price.before_price) * output.price.savings_amount).toFixed(2);
+        // }
 
         output.images = this.extractImages($, body);
         output.main_image = output.images.length ? output.images[0] : '';
