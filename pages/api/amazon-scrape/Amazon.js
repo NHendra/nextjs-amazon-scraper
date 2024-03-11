@@ -1236,6 +1236,12 @@ class AmazonScraper {
                 const bestSeller = $(`div[data-asin=${key}] span[id="${key}-best-seller"]`).text();
                 const amazonPrime = $(`div[data-asin=${key}] .s-prime`)[0];
 
+                if (titleThumbnailSearch) {
+                    scrapingResult[key].title = titleThumbnailSearch.attribs.alt;
+
+                    scrapingResult[key].thumbnail = titleThumbnailSearch.attribs.src;
+                }
+
                 if (priceSearch) {
                     scrapingResult[key].price.current_price = this.geo.price_format($(priceSearch.children[0]).text());
                 }
@@ -1279,12 +1285,6 @@ class AmazonScraper {
                     );
 
                     scrapingResult[key].score = parseFloat(scrapingResult[key].reviews.rating * scrapingResult[key].reviews.total_reviews).toFixed(2);
-                }
-
-                if (titleThumbnailSearch) {
-                    scrapingResult[key].title = titleThumbnailSearch.attribs.alt;
-
-                    scrapingResult[key].thumbnail = titleThumbnailSearch.attribs.src;
                 }
             } catch (err) {
                 continue;
