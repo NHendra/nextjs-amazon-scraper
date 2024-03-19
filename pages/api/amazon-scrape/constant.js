@@ -56,12 +56,12 @@ module.exports = {
                 return '';
             },
             price_format: (price) => {
-                const formatedPrice = price.match(/.*\$([0-9.]+)/);
+                const matchResult = price.match(/\$([\d,]+(?:\.\d+)?)/);
 
-                if (formatedPrice.length > 0) {
-                    return parseFloat(formatedPrice[1]);
+                if (matchResult && matchResult.length > 1) {
+                    const matchedPrice = matchResult[1].replace(/,/g, '');
+                    return parseFloat(matchedPrice);
                 }
-                return 0.0;
             },
             product_information: {
                 id: [
